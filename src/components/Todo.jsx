@@ -11,6 +11,14 @@ const Todo = () => {
 
 
   const addTodo = (text) => {
+    const duplicateTodo = todos.find((todo) => todo.text.toLowerCase() === text.toLowerCase());
+
+    // If the todo already exists, do not add it again
+    if (duplicateTodo) {
+      alert('Todo already exists');
+      return;
+    }
+
     const newTodos = [...todos, { text }];
     setTodos(newTodos);
   };
