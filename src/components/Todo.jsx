@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import "./Todo.css";
 const Todo = () => {
   const [todos, setTodos] = useState([
     { text: 'Learn React', isCompleted: false },
