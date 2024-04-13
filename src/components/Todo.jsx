@@ -1,29 +1,73 @@
 import { useState } from "react";
-const Todo=()=>{
-    const [todo,setTodo]=useState([
-        {task: "Go to store", done: false},
-        {task: "Go to work", done: true}, 
-        {task: "Go to gym", done: false}
-    ]);
-    const [newTodos,setNewTodos]=useState(""); 
-    
-    const setNewTodo=(e)=>{
-        e.preventDefault();
-        setTodo([...todo,{task: newTodos, done: Math.random()>0.5}]); 
-        console.log(todo);
-        setNewTodos("");
-    };
 
-    const textHandler = (e) => {
-        setNewTodos(e.target.value);
-    }
-    return(
-        <div>
-            <div><textarea onChange={textHandler}/></div>
-            <div><button onClick={setNewTodo}>Add Todo</button></div>
-            <div>{todo.map((todo)=>(<div key={todo.task} >{todo.task}</div>))}</div>
-        </div>
-    );
+const Todo = () => {
+  const [todos, setTodos] = useState([
+    { text: 'Learn React', isCompleted: false },
+    { text: 'Build a Todo app', isCompleted: false },
+  ]);
+
+
+  const [value, setValue] = useState('');
+
+
+  const addTodo = (text) => {
+    const newTodos = [...todos, { text }];
+    setTodos(newTodos);
+  };
+
+
+  const completeTodo = (index) => {
+    const newTodos = [...todos];
+    newTodos[index].isCompleted = true;
+    setTodos(newTodos);
+  };
+
+
+  const deleteTodo = (index) => {
+    const newTodos = [...todos];
+    newTodos.splice(index, 1);
+    setTodos(newTodos);
+  };
+
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!value) return;
+    addTodo(value);
+    setValue('');
+  };
+
+
+  return (
+    <div className="app">
+      <div className="todo-list">
+        {todos.map((todo, index) => (
+          <div
+            key={index}
+            className="todo"
+            style={{ textDecoration: todo.isCompleted ? 'line-through' : '' }}
+          >
+            {todo.text}
+            <div>
+              <button onClick={() => completeTodo(index)}>Complete</button>
+              <button onClick={() => deleteTodo(index)}>Delete</button>
+            </div>
+          </div>
+        ))}
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            className="input"
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+          />
+          <button type="submit">Add</button>
+        </form>
+      </div>
+    </div>
+  );
 };
+
+
 
 export default Todo;
