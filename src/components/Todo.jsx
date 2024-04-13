@@ -55,7 +55,7 @@ const Todo = () => {
           </div>
         ))}
         <form onSubmit={handleSubmit}>
-          <input
+          <textarea
             type="text"
             className="input"
             value={value}
