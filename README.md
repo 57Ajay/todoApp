@@ -1,5 +1,5 @@
 # React TodoApp
-## Link: [Todo App](57todo.netlify.app)
+## Link: [Todo](https://57todo.netlify.app/)
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
