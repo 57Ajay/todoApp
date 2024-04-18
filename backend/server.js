@@ -19,8 +19,8 @@ const Todo = mongoose.model('Todo', todoSchema);
 
 // Middleware
 app.use(cors());
-app.use(bodyParser.json());
 
+app.use(express.json());
 // Get all todos
 app.get('/api/todos', async (req, res) => {
   try {
