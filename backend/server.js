@@ -5,13 +5,9 @@ const mongoose = require('mongoose');
 
 const app = express();
 
-// Connect to MongoDB
-mongoose.connect('mongodb+srv://upajay:A1s2d3%40f4@cluster0.7vb9cvk.mongodb.net/', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => console.log('Connected to MongoDB'))
-.catch(error => console.error('Failed to connect to MongoDB', error));
+mongoose.connect('mongodb+srv://upajay:A1s2d3%40f4@cluster0.7vb9cvk.mongodb.net/todoApp')
+.then(() => console.log('Connected to MongoDB Atlas'))
+.catch(error => console.error('Failed to connect to MongoDB Atlas', error));
 
 // Todo Schema
 const todoSchema = new mongoose.Schema({

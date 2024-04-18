@@ -7,11 +7,16 @@ const Todo = () => {
 
   useEffect(() => {
     fetch("/api/todos")
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+        return res.json();
+      })
       .then((data) => setTodos(data))
       .catch((error) => console.error("Error fetching todos:", error));
   }, []);
-
+  
   const addTodo = () => {
     fetch("/api/todos", {
       method: "POST",
@@ -20,19 +25,30 @@ const Todo = () => {
       },
       body: JSON.stringify({ text: value }),
     })
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+        return res.json();
+      })
       .then((data) => {
         setTodos([...todos, data]);
         setValue('');
       })
       .catch((error) => console.error("Error adding todo:", error));
   };
-
+  
+  
   const completeTodo = (id) => {
     fetch(`/api/todos/${id}`, {
       method: "PUT",
     })
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! Status: ${res.status}`);
+        }
+        return res.json();
+      })
       .then((updatedTodo) => {
         const updatedTodos = todos.map((todo) =>
           todo._id === updatedTodo._id ? updatedTodo : todo
@@ -52,7 +68,7 @@ const Todo = () => {
       })
       .catch((error) => console.error("Error deleting todo:", error));
   };
-
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!value) return;
