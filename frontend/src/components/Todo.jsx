@@ -1,48 +1,63 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./Todo.css";
+
 const Todo = () => {
-  const [todos, setTodos] = useState([
-    { text: 'Learn React', isCompleted: false },
-    { text: 'Build a Todo app', isCompleted: false },
-  ]);
-  // State to store the value of the input field
+  const [todos, setTodos] = useState([]);
   const [value, setValue] = useState('');
 
+  useEffect(() => {
+    fetch("/api/todos")
+      .then((res) => res.json())
+      .then((data) => setTodos(data))
+      .catch((error) => console.error("Error fetching todos:", error));
+  }, []);
 
-  const addTodo = (text) => {
-    const duplicateTodo = todos.find((todo) => todo.text.toLowerCase() === text.toLowerCase());
-
-    // If the todo already exists, do not add it again
-    if (duplicateTodo) {
-      alert('Todo already exists');
-      return;
-    }
-
-    const newTodos = [...todos, { text }];
-    setTodos(newTodos);
+  const addTodo = () => {
+    fetch("/api/todos", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ text: value }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setTodos([...todos, data]);
+        setValue('');
+      })
+      .catch((error) => console.error("Error adding todo:", error));
   };
 
-
-  const completeTodo = (index) => {
-    const newTodos = [...todos];
-    newTodos[index].isCompleted = true;
-    setTodos(newTodos);
+  const completeTodo = (id) => {
+    fetch(`/api/todos/${id}`, {
+      method: "PUT",
+    })
+      .then((res) => res.json())
+      .then((updatedTodo) => {
+        const updatedTodos = todos.map((todo) =>
+          todo._id === updatedTodo._id ? updatedTodo : todo
+        );
+        setTodos(updatedTodos);
+      })
+      .catch((error) => console.error("Error completing todo:", error));
   };
 
-
-  const deleteTodo = (index) => {
-    const newTodos = [...todos];
-    newTodos.splice(index, 1);
-    setTodos(newTodos);
+  const deleteTodo = (id) => {
+    fetch(`/api/todos/${id}`, {
+      method: "DELETE",
+    })
+      .then(() => {
+        const updatedTodos = todos.filter((todo) => todo._id !== id);
+        setTodos(updatedTodos);
+      })
+      .catch((error) => console.error("Error deleting todo:", error));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!value) return;
-    addTodo(value);
-    setValue('');
+    addTodo();
   };
-
 
   return (
     <div className="app">
@@ -55,8 +70,8 @@ const Todo = () => {
           >
             {todo.text}
             <div>
-              <button onClick={() => completeTodo(index)}>Complete</button>
-              <button onClick={() => deleteTodo(index)}>Delete</button>
+              <button onClick={() => completeTodo(todo._id)}>Complete</button>
+              <button onClick={() => deleteTodo(todo._id)}>Delete</button>
             </div>
           </div>
         ))}
@@ -73,7 +88,5 @@ const Todo = () => {
     </div>
   );
 };
-
-
 
 export default Todo;
