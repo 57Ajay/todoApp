@@ -5,8 +5,7 @@ const Todo = () => {
     { text: 'Learn React', isCompleted: false },
     { text: 'Build a Todo app', isCompleted: false },
   ]);
-
-
+  // State to store the value of the input field
   const [value, setValue] = useState('');
 
 
@@ -36,7 +35,6 @@ const Todo = () => {
     newTodos.splice(index, 1);
     setTodos(newTodos);
   };
-
 
   const handleSubmit = (e) => {
     e.preventDefault();
